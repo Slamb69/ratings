@@ -1,0 +1,55 @@
+SEED DATA INFO:
+
+u.item: Movies
+movie id | movie title | release date | video release date |
+IMDb URL | unknown | Action | Adventure | Animation |
+Children's | Comedy | Crime | Documentary | Drama | Fantasy |
+Film-Noir | Horror | Musical | Mystery | Romance | Sci-Fi |
+Thriller | War | Western |
+
+u.user: Users
+user id | age | gender | occupation | zip code
+
+u.data: Ratings
+user_id \t movie_id \t score \t timestamp
+
+++++++++++++++++++++++++++++
+
+Model
+
+User
+
+Name            Type
+user_id         integer, primary key, serial
+email           optional string
+password        optional string
+age optional    integer
+zipcode         optional string (technically, these aren’t numeric)
+
+Movie
+
+Name            Type
+movie_id        integer, primary key, serial
+title           string
+released_at     datetime
+imdb_url        string
+
+Rating
+
+Name            Type
+rating_id       integer, primary key
+movie_id        integer, (foreign key - movie)
+user_id         integer, (foreign key - user)
+score           integer
+
++++++++++++++++++++++++++
+
+Relationships
+
+A user has many ratings
+A rating belongs to a user
+A movie has many ratings
+A rating belongs to a movie
+A user has many movies through ratings
+A movie has many users through ratings
+++++++++++++++++++++++++++++++++++++++++
