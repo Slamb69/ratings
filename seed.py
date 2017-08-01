@@ -7,7 +7,7 @@ from model import Movie
 
 from model import connect_to_db, db
 from server import app
-
+from datetime import datetime
 
 def load_users():
     """Load users from u.user into database."""
@@ -46,8 +46,22 @@ def load_movies():
     # Read u.item file and insert data
     for row in open("seed_data/u.item"):
         row = row.rstrip()
-        raw_data = row.split("|")********************
-        movie_id, title, released_at, imdb_url*****************
+        raw_data = row.split("|")
+        # Assigning only the data we want to variables
+        movie_id = raw_data[0]
+        title = raw_data[1]
+        released_at = raw_data[2]
+        imdb_url = raw_data[4]
+
+        # Get rid of the final space & (year) from title data
+        title = title[:-7]
+        title = title.decode("latin-1")
+
+        # Check for a release date, convert released_at data to a datetime obj.
+        if released_at:
+            released_at = datetime.strptime(released_at, "%d-%b-%Y")
+        else:
+            released_at = None
 
         movie = Movie(movie_id=movie_id,
                       title=title,
@@ -73,7 +87,8 @@ def load_ratings():
     # Read u.data file and insert data
     for row in open("seed_data/u.data"):
         row = row.rstrip()
-        user_id, movie_id, score = row.split("|")
+        # Unpacking the data, ignoring last number sequence, we don't need it.
+        user_id, movie_id, score, ignore = row.split("\t")
 
         rating = Rating(user_id=user_id,
                         movie_id=movie_id,
