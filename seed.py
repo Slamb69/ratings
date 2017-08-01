@@ -53,6 +53,9 @@ def load_movies():
         released_at = raw_data[2]
         imdb_url = raw_data[4]
 
+        #  # BETTER WAY TO DO IT ...clever -- we can unpack part of the row!
+        # movie_id, title, released_str, junk, imdb_url = row.split("|")[:5]
+
         # Get rid of the final space & (year) from title data
         title = title[:-7]
         title = title.decode("latin-1")
