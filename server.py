@@ -2,10 +2,12 @@
 
 from jinja2 import StrictUndefined
 
-from flask import Flask, jsonify
+from flask import (Flask, jsonify, render_template, redirect, request, flash,
+                   session)
+
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, db
+from model import User, Rating, Movie, connect_to_db, db
 
 
 app = Flask(__name__)
@@ -23,7 +25,20 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Homepage."""
     a = jsonify([1,3])
-    return a
+    return render_template('homepage.html')
+
+@app.route('/register', methods=['GET'])
+def register_form():
+    """Show the login page, with a link to the registration form page."""
+
+    return render_template('users.html')
+
+# @app.route('/register', methods=['POST'])
+# def register_form():
+#     """Show the login page, with a link to the registration form page."""
+
+
+#     return redirect("/")   
 
 
 if __name__ == "__main__":
