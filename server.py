@@ -3,12 +3,13 @@
 from jinja2 import StrictUndefined
 
 from flask import (Flask, jsonify, render_template, redirect, request, flash,
-                   session)
+                   session, SQLAlchemy)
 
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import User, Rating, Movie, connect_to_db, db
 
+# <script src="https://code.jquery.com/jquery.js"></script>
 
 app = Flask(__name__)
 
@@ -29,16 +30,36 @@ def index():
 
 @app.route('/register', methods=['GET'])
 def register_form():
-    """Show the login page, with a link to the registration form page."""
+    """Show registration form page."""
 
-    return render_template('users.html')
+    return render_template('register_form.html')
 
-# @app.route('/register', methods=['POST'])
-# def register_form():
-#     """Show the login page, with a link to the registration form page."""
+@app.route('/register', methods=['POST'])
+def register_form():
+    """Get data from registration form and redirect to homepage."""
+    
+
+    reg_email = request.form.get("email")
+    reg_password = request.form.get("password")
+
+    # checking if the email is already in the database
+    if User.query.filter(User.email == reg_email):
+        alert("This email is already registered")
+    else:
+    
+
+        if request.form.get("age"):
+            age = request.form.get("age")
+        else:
+            age = None
 
 
-#     return redirect("/")   
+        if request.form.get("zipcode"):
+            zipcode = request.form.get("zipcode")
+        else:
+            zipcode = None
+
+    return redirect("/")
 
 
 if __name__ == "__main__":

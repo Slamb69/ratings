@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+<head>
+    <title>{% block title %} Sign me up! {% endblock%}</title>
+</head>
+
+{% block content %}
+
+
+<h2>Register</h2>
+
+<form action="/register" id="reg_form">
+Email: <input type="email" id="email" default="email@here.com" required>
+Password: <input type="password" id="password" required>
+Age: <input type="number" min="5" max="100" value=1 id="age">
+Zipcode: <input type="text" id="zipcode">
+
+</form>
+<h2>Users</h2>
+<p><a href="/users">View all users</a></p>
+
+{% endblock %}
