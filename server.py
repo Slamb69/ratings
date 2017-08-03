@@ -32,15 +32,16 @@ def index():
 
 @app.route('/register', methods=['GET'])
 def register_form():
-    print "Hello GET"
+    # print "Hello GET"
 
     """Show registration form page."""
     # if request.method == "GET":
     return render_template('register_form.html')
 
+
 @app.route('/register', methods=['POST'])
 def registered_form():
-    print "Hello POST"
+    # print "Hello POST"
     """Get data from registration form and redirect to homepage."""
     # if request.method == "POST":
     reg_email = request.form.get("email")
@@ -61,16 +62,54 @@ def registered_form():
 
     print reg_email
 
-    # if User.query.filter(User.email == reg_email):
-    #     # alert("There is already an account for that email address.")
-    #     return redirect('/')
-    # else:
-    new_user = User(email=reg_email, password=reg_password, age=age, zipcode=zipcode)
-    print new_user
-    db.session.add(new_user)
-    db.session.commit()
+    if User.query.filter(User.email == reg_email):
+        flash("There is already an account for that email address.")
+        return redirect('/')
+    else:
+        new_user = User(email=reg_email, password=reg_password, age=age, zipcode=zipcode)
+        print new_user
+        db.session.add(new_user)
+        db.session.commit()
+        
+        return redirect("/")
+
+@app.route('/login', methods=['GET'])
+def login_form():
+    """Show login form page."""
+    # if request.method == "GET":
+    return render_template('login.html')
+
+
+@app.route('/login', methods=['POST'])
+def log_in():
+    """Verify login and redirect to homepage."""
     
-    return redirect("/")
+    login_email = request.form.get("email")
+    login_password = request.form.get("password")
+
+    u = User.query
+
+    # THIS DOESN"T WORK = FIX IF STATEMENT **************************
+    if u.filter(User.email == login_email):
+        if u.filter(User.password == login_password):
+            login_user = u.filter(User.email == login_email).first()
+            session["current_user"] = login_user.user_id
+            flash("You are logged in.")
+            return redirect('/')
+        else:
+            flash("Incorrect password.")
+            return render_template("login.html")
+    else:
+        flash("This email is not registered.")
+        return render_template("login.html")
+
+     # Verify email exists and password is correct.
+    if request.form.get("age"):
+        age = request.form.get("age")
+    else:
+        age = None
+
+
 
 
 if __name__ == "__main__":

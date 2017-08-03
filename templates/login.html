@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+<head>
+    <title>{% block title %} Sign me up! {% endblock%}</title>
+<!-- <script src="https://code.jquery.com/jquery.js"></script> -->
+</head>
+
+{% block content %}
+
+
+<h2>Login</h2>
+
+<form action="/login" id="login" method="POST">
+  Email: <input name="email" type="email" id="email" default="email@here.com" required>
+  Password: <input name="password" type="password" id="password" required>
+  <input type='submit' id='submit' value='Log me in'>
+</form>
+
+
+{% endblock %}
