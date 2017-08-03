@@ -3,13 +3,15 @@
 from jinja2 import StrictUndefined
 
 from flask import (Flask, jsonify, render_template, redirect, request, flash,
-                   session, SQLAlchemy)
+                   session)
+
+from flask_sqlalchemy import SQLAlchemy
 
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import User, Rating, Movie, connect_to_db, db
 
-# <script src="https://code.jquery.com/jquery.js"></script>
+
 
 app = Flask(__name__)
 
@@ -30,35 +32,44 @@ def index():
 
 @app.route('/register', methods=['GET'])
 def register_form():
-    """Show registration form page."""
+    print "Hello GET"
 
+    """Show registration form page."""
+    # if request.method == "GET":
     return render_template('register_form.html')
 
 @app.route('/register', methods=['POST'])
-def register_form():
+def registered_form():
+    print "Hello POST"
     """Get data from registration form and redirect to homepage."""
-    
-
+    # if request.method == "POST":
     reg_email = request.form.get("email")
+
     reg_password = request.form.get("password")
 
-    # checking if the email is already in the database
-    if User.query.filter(User.email == reg_email):
-        alert("This email is already registered")
+    # Get age value, or assign as None.
+    if request.form.get("age"):
+        age = request.form.get("age")
     else:
+        age = None
+
+    # Get zipcode value, or assign as None.
+    if request.form.get("zipcode"):
+        zipcode = request.form.get("zipcode")
+    else:
+        zipcode = None
+
+    print reg_email
+
+    # if User.query.filter(User.email == reg_email):
+    #     # alert("There is already an account for that email address.")
+    #     return redirect('/')
+    # else:
+    new_user = User(email=reg_email, password=reg_password, age=age, zipcode=zipcode)
+    print new_user
+    db.session.add(new_user)
+    db.session.commit()
     
-
-        if request.form.get("age"):
-            age = request.form.get("age")
-        else:
-            age = None
-
-
-        if request.form.get("zipcode"):
-            zipcode = request.form.get("zipcode")
-        else:
-            zipcode = None
-
     return redirect("/")
 
 
